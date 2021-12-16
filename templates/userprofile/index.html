@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} Yakir图床-首页 {% endblock title %}
+{% block content %}
+    {% include "sidebar.html" %}
+
+    <div class="main-wrap">
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="{% url 'userprofile:home' %}">用户操作</a><span class="crumb-step">&gt;</span><span class="crumb-name">用户信息</span></div>
+        </div>
+        <div class="result-wrap">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th colspan="3" scope="col">Profile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>用户名</td>
+                  <td>{{ rd.data.username }}</td>
+                </tr>
+                <tr>
+                  <td>邮箱</td>
+                  <td>{{ rd.data.email }}</td>
+                </tr>
+                <tr>
+                  <td>Token</td>
+                  <td>{{ rd.actoken }}</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+    <!--/main-->
+{% endblock content %}

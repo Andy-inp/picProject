@@ -1,0 +1,60 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} Yakir图床-上传图片 {% endblock title %}
+{% block content %}
+    {% include "sidebar.html" %}
+    {% csrf_token %}
+
+    <!--/sidebar-->
+<div class="main-wrap">
+    <!--/main-->
+    <div class="crumb-wrap">
+        <div class="crumb-list"><i class="icon-font"></i><a href="{% url 'userprofile:usage_overview' %}">图床管理</a><span class="crumb-step">&gt;</span><span class="crumb-name">上传图片</span></div>
+    </div>
+
+    <div class="result-wrap" style="position: relative">
+{#        使用form表单上传或ajax方式上传，此处选择用ajax方式#}
+{#        <form method="post" role="form" enctype="multipart/form-data">#}
+{#            <div style="width: 1000px;position: absolute">#}
+{#                <input type="file" name="file-input" id="file-input" multiple class="file"/>#}
+{#            </div>#}
+{#        </form>#}
+            <div style="width: 1000px;position: absolute">
+                <input type="file" name="file-input" id="file-input" multiple class="file-loading"/>
+            </div>
+    </div>
+
+
+</div>
+{% endblock content %}
+
+{% block uploadjs %}
+<script>
+    $('#file-input').fileinput({
+        language: 'zh',     //设置语言
+        dropZoneEnabled: true,      //是否显示拖拽区域
+        dropZoneTitle: "可以将图片拖放到这里，支持文件类型：jpg，png，gif，jpeg",    //拖拽区域显示文字
+        uploadUrl: '/smmsmanage/upload/',  //上传路径
+        allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],   //指定上传文件类型
+        maxFileSize: 2048,   //上传文件最大值，单位kb
+        uploadAsync: true,  //异步上传
+        maxFileCount: 5,    //上传文件最大个数。
+        uploadExtraData: {'csrfmiddlewaretoken': '{{ csrf_token }}'},  //csrftoken认证
+        showCaption: true,  //显示文件名
+        showPreview: true,  //显示文件预览
+        browseClass: "btn btn-primary", //文件选择器/浏览按钮的CSS类。默认为btn btn-primary
+        layoutTemplates: {
+            actionUpload: '', //去除上传预览缩略图中的上传图片
+            actionZoom: '',   //去除上传预览缩略图中的查看详情预览的缩略图标
+            actionDownload: '', //去除上传预览缩略图中的下载图标
+            actionDelete: '', //去除上传预览的缩略图中的删除图标
+        },
+    }).on("fileuploaded", function (event, data) { //异步上传成功后回调
+        console.log(event)
+        console.log(data);		//data为返回的数据
+        setTimeout(function(){ //执行延时关闭
+            closeSelf();
+        }, 1000);
+    });
+</script>
+{% endblock uploadjs %}
+

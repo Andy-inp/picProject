@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} Yakir图床-用户概览 {% endblock title %}
+{% block content %}
+    {% include "sidebar.html" %}
+
+    <div class="main-wrap">
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="{% url 'userprofile:usage_overview' %}">用户操作</a><span class="crumb-step">&gt;</span><span class="crumb-name">使用概览</span></div>
+        </div>
+        <div class="result-wrap">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th colspan="3" scope="col">Usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>当前账户总容量</td>
+                  <td>{{ rd.data.disk_limit }}</td>
+                </tr>
+                <tr>
+                  <td>已使用容量</td>
+                  <td>{{ rd.data.disk_usage }}</td>
+                </tr>
+                <tr>
+                  <td>当前已使用占比</td>
+                  <td><div class="progress" style="height:30px;"><div class="progress-bar" style="width:{{ rd.usage_percent }}%;">{{ rd.usage_percent }}%</div></div></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+    <!--/main-->
+{% endblock content %}

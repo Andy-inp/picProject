@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} Yakir图床-图片列表 {% endblock title %}
+{% block content %}
+    {% include "sidebar.html" %}
+
+    <div class="main-wrap">
+    <!--/main-->
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="{% url 'userprofile:usage_overview' %}">图床管理</a><span class="crumb-step">&gt;</span><span class="crumb-name">图床地址</span></div>
+        </div>
+        <div class="result-wrap">
+        </div>
+    </div>
+    </div>
+{% endblock content %}
