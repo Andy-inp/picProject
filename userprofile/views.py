@@ -49,10 +49,11 @@ def home(request):
         return_data = rd_test
         return_data['actoken'] = acToken
     except Exception as e:
-        rd = None
-        dlogger.error('Request userprofile failed, Please check network or request argument.')
+        return_data = None
+        dlogger.error(f"Request userprofile failed, reason：{e}")
     finally:
         return render(request, 'userprofile/index.html', {'rd': return_data})
+
 
 def usage_overview(request):
     try:
@@ -70,6 +71,6 @@ def usage_overview(request):
         return_data['usage_percent'] = usage_percent
     except Exception as e:
         return_data = None
-        dlogger.error('Request userprofile failed, Please check network or request argument.')
+        dlogger.error(f"Request userprofile failed, reason：{e}")
     finally:
         return render(request, 'userprofile/usage-overview.html', {'rd': return_data})

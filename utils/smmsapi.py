@@ -1,7 +1,8 @@
 import requests
 import json
-from getlogger import GetLogger
-smmslog = GetLogger().get_logger('smmslogger')
+# 获取日志器
+# from getlogger import GetLogger
+# smmslog = GetLogger().get_logger('smmslogger')
 
 __all__ = [
     'SmmsApi',
@@ -32,7 +33,7 @@ class _ApiBase(object):
             error_return = dict()
             error_return['code'] = 111
             error_return['msg'] = f"请求 {url} 失败，检查网络或参数！"
-            smmslog.error(f"请求 {url} 失败，检查网络或参数！")
+            # smmslog.error(f"请求 {url} 失败，检查网络或参数！")
             return error_return
 
     # @property
@@ -98,7 +99,7 @@ class SmmsApi(_ApiBase):
         resp = self._do('GET', data=data)
         return resp
 
-    def delete_image(self, del_hash, format='json'):
+    def delete_image(self, del_hash=None, format='json'):
         """
         Parameters
         ----------
@@ -129,10 +130,4 @@ class SmmsApi(_ApiBase):
         return resp
 
 if __name__ == '__main__':
-    # pass
-    ah = {'Authorization': 'yW47L4kjQK3yeLHYNj7vNjBq3RpEG3Tg'}
-    s = SmmsApi('https://sm.ms/api/v2')
-    s.endpoint = '/upload_history'
-    s.auth_header = ah
-    result = s.upload_history()
-    print(result)
+    pass

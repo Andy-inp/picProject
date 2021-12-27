@@ -8,8 +8,137 @@
         <div class="crumb-wrap">
             <div class="crumb-list"><i class="icon-font"></i><a href="{% url 'userprofile:usage_overview' %}">图床管理</a><span class="crumb-step">&gt;</span><span class="crumb-name">图床地址</span></div>
         </div>
-        <div class="result-wrap">
+
+        <div class="result-wrap" style="position: absolute">
+            <a href="javascript:;"  id="remove"><span class="hidden-480">批量删除</span></a>
+            </table>
+            <table id="table" style="position: relative">
+            </table>
+
         </div>
     </div>
-    </div>
 {% endblock content %}
+
+{% block uploadjs %}
+    <script>
+        $('#table').bootstrapTable({
+            url: '/smmsmanage/img-list/imagelist.json',
+            toolbar: '#toolbar',                //工具按钮用哪个容器
+            //theadClasses:'.thead-light',
+            //striped: true,                      //是否显示行间隔色
+            //cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            showPaginationSwitch: true,        //是否显示分页数
+            pageNumber: 1,                       //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 20],                //可供选择的每页的行数（*）
+            //showRefresh: true,                  //是否显示刷新按钮
+            clickToSelect: true,                //是否启用点击选中行
+            singleSelect: false,                 //是否单选模式
+            height: $(window).height() - 100,   //table总高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            theadClasses: "thead-dark",         //表头样式
+
+            columns: [
+            {
+                checkbox: true,
+                //visible: true
+            }, {
+                field: 'filename',
+                title: '文件名'
+            }, {
+                field: 'preview',
+                title: '图片地址',
+                align: 'center',
+                {#formatter: previewFormatter,#}
+            }, {
+                field: 'size',
+                title: '大小'
+            }, {
+                field: 'width',
+                title: '宽度'
+            }, {
+                field: 'height',
+                title: '高度'
+            }, {
+                field: 'upload_date',
+                title: '上传时间'
+            }, {
+                field: 'operations',
+                title: '操作',
+                align: 'center',
+                valign: 'middle',
+                formatter: actionFormatter,
+            }],
+            onLoadSuccess: function () {
+            },
+            onLoadError: function () {
+                showTips("数据获取失败！");
+            }
+        });
+
+        function actionFormatter(value, row, index) {
+            var result = "";
+            {#result += "<a href='" + v + "' class='btn btn-xs red' title='删除'><span class='glyphicon glyphicon-remove'>删除</span></a>";#}
+            result += '<a href="#" class="btn btn-xs red" title="删除" onclick="delsingleimg(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'
+            return result;
+        };
+
+        function delsingleimg(value) {
+            jQuery.ajax({
+                url: "/smmsmanage/img-list/singeldel",
+                type: "get",
+                data: {'v': value},
+                {#success: function (data, status, result){#}
+                success: function (result){
+                    var data = JSON.parse(result);
+                    if(data.success){
+                        location.reload();
+                    }
+                    else{
+                        alert("删除失败，失败原因：" + data.message);
+                    }
+                },
+                error: function (e){
+                    console.log(e.status);
+                    console.log(e.response);
+                }
+             })
+         };
+
+        {#// 删除按钮事件#}
+        {#$("#remove").on("click", function () {#}
+        {#    if (!confirm("是否确认删除？"))#}
+        {#        return;#}
+        {#    var rows = $("#table").bootstrapTable('getSelections'); // 获得要删除的数据#}
+        {#    if (rows.length == 0) { // rows 主要是为了判断是否选中，下面的else内容才是主要#}
+        {#        alert("请先选择要删除的记录!");#}
+        {#        return;#}
+        {#    } else {#}
+        {#        var ids = new Array(); // 声明一个数组#}
+        {#        $(rows).each(function () { // 通过获得别选中的来进行遍历#}
+        {#            ids.push(this.id); // cid为获得到的整条数据中的一列#}
+        {#        });#}
+        {#        //后端删除的方法#}
+        {#        deleteMs(ids)#}
+        {#    }#}
+        {# })#}
+        {#// 删除访客,删除数据库内容，刷新表格即可删除#}
+        {#function deleteMs(ids) {#}
+        {#    $.ajax({#}
+        {#        url: "/caller/dels?ids=" + ids,#}
+        {#        dataType: "json",#}
+        {#        type: "get",#}
+        {#        success: function (data) {#}
+        {#            if (data > 0) {#}
+        {#                msg(6, "操作成功")#}
+        {#                $('#mytab').bootstrapTable('refresh', {#}
+        {#                    url: '/caller/list'#}
+        {#                });#}
+        {#            }#}
+        {#        }#}
+        {#    });#}
+        {# }#}
+    </script>
+
+
+{% endblock uploadjs %}
