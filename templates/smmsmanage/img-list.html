@@ -10,10 +10,8 @@
         </div>
 
         <div class="result-wrap" style="position: absolute">
-            <a href="javascript:;"  id="remove"><span class="hidden-480">批量删除</span></a>
-            </table>
-            <table id="table" style="position: relative">
-            </table>
+            <a href="{% url "smmsmanage:batchdelimg" %}"  id="batch-remove"><span class="hidden-480">批量删除</span></a>
+            <table id="table" style="position: relative"></table>
 
         </div>
     </div>
@@ -78,66 +76,43 @@
 
         function actionFormatter(value, row, index) {
             var result = "";
-            {#result += "<a href='" + v + "' class='btn btn-xs red' title='删除'><span class='glyphicon glyphicon-remove'>删除</span></a>";#}
-            result += '<a href="#" class="btn btn-xs red" title="删除" onclick="delsingleimg(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'
+            {#result += '<a href="#" class="btn btn-xs red" title="删除" onclick="delsingleimg(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'#}
+            result += '<a href="#" class="btn btn-xs red" title="删除" onclick="confirm_delete(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'
             return result;
         };
 
-        function delsingleimg(value) {
-            jQuery.ajax({
-                url: "/smmsmanage/img-list/singeldel",
-                type: "get",
-                data: {'v': value},
-                {#success: function (data, status, result){#}
-                success: function (result){
-                    var data = JSON.parse(result);
-                    if(data.success){
-                        location.reload();
-                    }
-                    else{
-                        alert("删除失败，失败原因：" + data.message);
-                    }
-                },
-                error: function (e){
-                    console.log(e.status);
-                    console.log(e.response);
+        // 删除确认操作
+        function confirm_delete(value) {
+            // 调用layer弹窗组件
+            layer.open({
+                title: "确认删除",
+                content: "确定要删除图片吗？",
+                // 点击确定按钮后调用的回调函数
+                {#yes: function (index, layero) {#}
+                {#    location.href = '{% url "smmsmanage:delimg" %}'#}
+                {# },#}
+                yes: function (value) {
+                    jQuery.ajax({
+                        url: "/smmsmanage/img-list/singeldel",
+                        type: "get",
+                        data: {'v': value},
+                        {#success: function (data, status, result){#}
+                        success: function (result) {
+                            var data = JSON.parse(result);
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                alert("删除失败，失败原因：" + data.message);
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e.status);
+                            console.log(e.response);
+                        }
+                    })
                 }
-             })
-         };
-
-        {#// 删除按钮事件#}
-        {#$("#remove").on("click", function () {#}
-        {#    if (!confirm("是否确认删除？"))#}
-        {#        return;#}
-        {#    var rows = $("#table").bootstrapTable('getSelections'); // 获得要删除的数据#}
-        {#    if (rows.length == 0) { // rows 主要是为了判断是否选中，下面的else内容才是主要#}
-        {#        alert("请先选择要删除的记录!");#}
-        {#        return;#}
-        {#    } else {#}
-        {#        var ids = new Array(); // 声明一个数组#}
-        {#        $(rows).each(function () { // 通过获得别选中的来进行遍历#}
-        {#            ids.push(this.id); // cid为获得到的整条数据中的一列#}
-        {#        });#}
-        {#        //后端删除的方法#}
-        {#        deleteMs(ids)#}
-        {#    }#}
-        {# })#}
-        {#// 删除访客,删除数据库内容，刷新表格即可删除#}
-        {#function deleteMs(ids) {#}
-        {#    $.ajax({#}
-        {#        url: "/caller/dels?ids=" + ids,#}
-        {#        dataType: "json",#}
-        {#        type: "get",#}
-        {#        success: function (data) {#}
-        {#            if (data > 0) {#}
-        {#                msg(6, "操作成功")#}
-        {#                $('#mytab').bootstrapTable('refresh', {#}
-        {#                    url: '/caller/list'#}
-        {#                });#}
-        {#            }#}
-        {#        }#}
-        {#    });#}
-        {# }#}
+            })
+        }
     </script>
 
 

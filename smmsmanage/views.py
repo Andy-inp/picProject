@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from homeapp.models import UserProfile
+from userprofile.models import UserProfile
 import logging
 dlogger = logging.getLogger('defaultlogger')
 import json
@@ -69,7 +69,12 @@ def upload(request):
         return HttpResponse(status='400', reason='Request method not allowed, Please check...')
 
 def img_list(request):
-    return render(request, 'smmsmanage/img-list.html')
+    if request.method == 'POST':
+        # 提交批量删除操作
+        imginfo = {}
+        return redirect('/smmsmanage/batchdel')
+    else:
+        return render(request, 'smmsmanage/img-list.html')
 
 def imglist_json(request, imglist):
     try:
@@ -103,12 +108,12 @@ def delimg(request):
     try:
         # 测试数据
         del_result = {
-            # 'success': True,
-            # 'code': 'success',
-            # 'message': 'File delete success',
-            'success': False,
-            'code': 'error',
-            'message': 'failed reason: xxxxxx.',
+            'success': True,
+            'code': 'success',
+            'message': 'File delete success',
+            # 'success': False,
+            # 'code': 'error',
+            # 'message': 'failed reason: xxxxxx.',
             'data': [],
             'RequestId': '16789D65-C375-44AB-8D33-AFB859265472'
         }
@@ -120,6 +125,17 @@ def delimg(request):
         # smmsApi = initsmms('smmsapi', '/delete', ah)
         # del_result = smmsApi.delete_image(imghash)
         # assert del_result['success'], f"delete image failed!!!"
+        return_data = json.dumps(del_result)
+    except Exception as e:
+        return_data = None
+        dlogger.error(f"Delete image failed, reason：{e}")
+    finally:
+        return HttpResponse(return_data)
+
+def batchdelimg(request):
+    try:
+        del_result = {}
+        print('此处为批量删除操作')
         return_data = json.dumps(del_result)
     except Exception as e:
         return_data = None

@@ -1,7 +1,8 @@
-from django.shortcuts import render
-# from django.http import HttpResponse
-# from django.contrib.auth import authenticate, login, logout
-from homeapp.models import UserProfile
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from .forms import UserLoginForm
+from userprofile.models import UserProfile
 import logging
 dlogger = logging.getLogger('defaultlogger')
 
@@ -9,6 +10,16 @@ dlogger = logging.getLogger('defaultlogger')
 accountInfo = UserProfile.objects.filter(id=1).first()
 acToken = accountInfo.token
 authHeader = {'Authorization': acToken}
+
+def user_login(request):
+    if request.method == 'POST':
+        print(request.POST)
+        user = UserProfile.objects.all()
+        return render(request, 'userprofile/login.html', {'data': user})
+    elif request.method == 'GET':
+        return render(request, 'userprofile/login.html')
+    else:
+        return HttpResponse(status='400', reason='Request method not allowed, Please check...')
 
 def initsmms(service: str="yaml service",
             endpoint: str="request endpoint",
