@@ -21,7 +21,8 @@ from userprofile import views as upview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('^login/$', upview.user_login),
+    re_path('^login/$', upview.user_login, name='login'),
+    re_path('^logout/$', upview.user_logout, name='logout'),
     path('userprofile/', include('userprofile.urls', namespace='userprofile')),
     path('smmsmanage/', include('smmsmanage.urls', namespace='smmsmanage')),
 ]

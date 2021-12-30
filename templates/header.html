@@ -1,18 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
+    <div class="container">
+        <!-- 导航栏商标 -->
+        <a class="navbar-brand" href="#">首页</a>
+        <!-- 导航入口 -->
+        <div>
+            <ul class="navbar-nav">
+                <!-- 条目 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'userprofile:home' %}">图床工具</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <!-- 如果用户已经登录，则显示用户名下拉框 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'logout' %}">退出登录</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <!-- 如果用户未登录，则显示 “登录” -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">登录</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
 
-    <!-- 导航栏商标 -->
-    <a class="navbar-brand" href="#">首页</a>
-
-    <!-- 导航入口 -->
-    <div>
-      <ul class="navbar-nav">
-        <!-- 条目 -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'userprofile:home' %}">图床工具</a>
-        </li>
-      </ul>
     </div>
-
-  </div>
 </nav>

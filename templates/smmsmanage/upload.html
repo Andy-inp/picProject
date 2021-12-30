@@ -2,8 +2,6 @@
 {% block title %} Yakir图床-上传图片 {% endblock title %}
 {% block content %}
     {% include "sidebar.html" %}
-    {% csrf_token %}
-
     <!--/sidebar-->
 <div class="main-wrap">
     <!--/main-->
@@ -12,15 +10,16 @@
     </div>
 
     <div class="result-wrap" style="position: relative">
+        {% csrf_token %}
 {#        使用form表单上传或ajax方式上传，此处选择用ajax方式#}
 {#        <form method="post" role="form" enctype="multipart/form-data">#}
 {#            <div style="width: 1000px;position: absolute">#}
 {#                <input type="file" name="file-input" id="file-input" multiple class="file"/>#}
 {#            </div>#}
 {#        </form>#}
-            <div style="width: 1000px;position: absolute">
-                <input type="file" name="file-input" id="file-input" multiple class="file-loading"/>
-            </div>
+        <div style="width: 1000px;position: absolute">
+            <input type="file" name="file-input" id="file-input" multiple class="file-loading"/>
+        </div>
     </div>
 
 

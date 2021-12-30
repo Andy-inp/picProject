@@ -6,9 +6,9 @@ import json
 import time
 
 # 查询条件
-accountInfo = UserProfile.objects.filter(id=1).first()
-acToken = accountInfo.token
-authHeader = {'Authorization': acToken}
+# accountInfo = UserProfile.objects.filter(id=1).first()
+# acToken = accountInfo.token
+# authHeader = {'Authorization': acToken}
 
 def initsmms(service: str="yaml service",
             endpoint: str="request endpoint",
@@ -29,7 +29,7 @@ def upload(request):
         return render(request, 'smmsmanage/upload.html')
     elif request.method == 'POST':
         try:
-            ah = authHeader
+            ah = 'authHeader'
             smmsApi = initsmms('smmsapi', '/upload', ah)
             # 开始调用smms上传接口并记录
             uploadResult = []

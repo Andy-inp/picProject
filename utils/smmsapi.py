@@ -1,8 +1,8 @@
 import requests
 import json
-# 获取日志器
-# from getlogger import GetLogger
-# smmslog = GetLogger().get_logger('smmslogger')
+# 获取日志器（与django执行目录路径冲突，此处不使用自定义日志器）
+# from utils.getlogger import GetLogger
+# smmsloger = GetLogger().get_logger('smmslogger')
 
 __all__ = [
     'SmmsApi',
@@ -27,13 +27,13 @@ class _ApiBase(object):
                                    headers=self.auth_header,
                                    **kwargs)
             success_return = getattr(res, 'json', None)
-            # smmslog.info(f"请求 {url} 成功，返回信息：{success_return()}")
+            # smmsloger.info(f"请求 {url} 成功，返回信息：{success_return()}")
             return success_return()
         except Exception as e:
             error_return = dict()
             error_return['code'] = 111
             error_return['msg'] = f"请求 {url} 失败，检查网络或参数！"
-            # smmslog.error(f"请求 {url} 失败，检查网络或参数！")
+            # smmsloger.error(f"请求 {url} 失败，检查网络或参数！")
             return error_return
 
     # @property
@@ -128,6 +128,18 @@ class SmmsApi(_ApiBase):
         # }
         resp = self._do('POST', files=files)
         return resp
+
+def initsmms(service: str="yaml service", endpoint: str="request endpoint", authheader: str="request header") -> "smms class":
+    # 获取配置
+    from utils.getconfig import GetYamlConfig
+    cfg = GetYamlConfig()
+    apihost = cfg.get_config(service)['smmsApiHost']
+    # 初始化smms接口
+    # from utils.smmsapi import SmmsApi
+    smmsApi = SmmsApi(apihost)
+    smmsApi.endpoint = endpoint
+    smmsApi.auth_header = authheader
+    return smmsApi
 
 if __name__ == '__main__':
     pass
