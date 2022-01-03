@@ -1,3 +1,7 @@
+[![Python Version](https://img.shields.io/badge/python-3.9.7-red)](https://img.shields.io/badge/python-3.9.7-red)
+[![Python Version](https://img.shields.io/badge/Django-3.2.9-blue)](https://img.shields.io/badge/Django-3.2.9-blue)
+
+
 ### 前言
 - 使用图床接口地址为 [SMMS](https://sm.ms/) 网站
 - 网站旨在个人学习使用，如有侵权请联系删除
