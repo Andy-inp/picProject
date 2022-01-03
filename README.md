@@ -30,7 +30,7 @@ UserProfile.objects.create(username='yakir111', password='passwd123', token='xxx
 from django.contrib.auth.models import User
 User.objects.create_user('Username', 'Password')   # 将用户名与密码注册入User 表
 ```
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/21806976/1641202290287-a65f1527-d610-4a56-bf17-81ddd64d5463.png#clientId=u54e950a8-6715-4&crop=0.0322&crop=0&crop=0.9705&crop=0.9949&from=paste&height=707&id=uf2542a91&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1508&originWidth=2880&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5616114&status=done&style=none&taskId=ub1692fe3-7ca3-44dd-a219-6827c035121&title=&width=1351)
+![image.png](https://s2.loli.net/2022/01/03/oqfGJIYeUEd3Fsg.png)
 
 
 #### 首页-用户操作-用户信息
