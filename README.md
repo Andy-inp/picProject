@@ -17,15 +17,14 @@
 #### 登录注册页
 
 - 支持登录、注册（跳转SMMS 官网自行注册， 注册后信息需自行存入user_profile 表中）
-   - userprofile 表：
++ userprofile 表：
 ```python
 # python manage.py shell
 from userprofile.models import User, UserProfile
 # username、password、token 手动更新注册信息
 UserProfile.objects.create(username='yakir111', password='passwd123', token='xxxxxxx') 
 ```
-
-   - auth_user 表：
++ auth_user 表：
 ```python
 # python manage.py shell
 from django.contrib.auth.models import User
