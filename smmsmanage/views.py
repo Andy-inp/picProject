@@ -68,7 +68,7 @@ def imglist_json(request, imglist):
         img_db_object = account_object.imagelist_set.all()
         authheader = {'Authorization': account_object.token}
         # 默认调用数据库返回数据
-        if False:
+        if True:
             select_result = serializers.serialize('json', img_db_object)
             select_result = json.loads(select_result)
             img_list = list()
@@ -117,31 +117,30 @@ def imglist_json(request, imglist):
 @login_required(login_url='/login/')
 def singeldel(request):
     try:
-        # 测试数据
-        del_result = {
-            'success': True,
-            'code': 'success',
-            'message': 'File delete success',
-            # 'success': False,
-            # 'code': 'error',
-            # 'message': 'failed reason: xxxxxx.',
-            'data': [],
-            'RequestId': '16789D65-C375-44AB-8D33-AFB859265472'
-        }
-        # 获取到需要删除的 hash 值
-        # params = request.GET.get('v')
-        # imghash = params.split('/')[-1]
-        # # 调用接口删除文件
-        # ah = authHeader
-        # smmsApi = initsmms('smmsapi', '/delete', ah)
-        # del_result = smmsApi.delete_image(imghash)
-        # assert del_result['success'], f"delete image failed!!!"
-        return_data = json.dumps(del_result)
+        if request.method == 'POST':
+            # 数据库取出用户数据
+            current_uid = request.session['_auth_user_id']
+            username = User.objects.get(id=current_uid).username
+            account_object = UserProfile.objects.get(username=username)
+            img_db_object = account_object.imagelist_set.all()
+            authheader = {'Authorization': account_object.token}
+            # 获取到需要删除的 hash 值
+            params = request.POST.get('delurl')
+            imghash = params.split('/')[-1]
+            # 调用接口删除文件
+            smmsApi = initsmms('smmsapi', '/delete', authheader)
+            del_result = smmsApi.delete_image(imghash)
+            assert del_result['success'], f"del_result success not True, delete failed!!!"
+            # 同时删除数据库记录
+            img_db_object.filter(deleteurl=params).delete()
+            return_data = del_result
+        else:
+            return HttpResponse('Only allow Post Request...')
     except Exception as ec:
-        return_data = None
-        dlogger.error(f"Delete image failed, reason：{ec}")
+        return_data = {'success': False, 'message': f"{ec}"}
+        dlogger.error(f"Delete image failed, reason：{return_data}")
     finally:
-        return HttpResponse(return_data)
+        return HttpResponse(json.dumps(return_data))
 
 @login_required(login_url='/login/')
 def batchdelimg(request):

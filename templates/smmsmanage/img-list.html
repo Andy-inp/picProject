@@ -10,6 +10,7 @@
         </div>
 
         <div class="result-wrap" style="position: absolute">
+            {% csrf_token %}
             <a href="{% url "smmsmanage:batchdelimg" %}"  id="batch-remove"><span class="hidden-480">批量删除</span></a>
             <table id="table" style="position: relative"></table>
 
@@ -76,26 +77,23 @@
 
         function actionFormatter(value, row, index) {
             var result = "";
-            {#result += '<a href="#" class="btn btn-xs red" title="删除" onclick="delsingleimg(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'#}
             result += '<a href="#" class="btn btn-xs red" title="删除" onclick="confirm_delete(\''+value+'\')" ><span class="glyphicon glyphicon-remove">删除</span></a>'
             return result;
         };
 
         // 删除确认操作
         function confirm_delete(value) {
+            var delurl = value;
             // 调用layer弹窗组件
             layer.open({
                 title: "确认删除",
                 content: "确定要删除图片吗？",
-                // 点击确定按钮后调用的回调函数
-                {#yes: function (index, layero) {#}
-                {#    location.href = '{% url "smmsmanage:delimg" %}'#}
-                {# },#}
-                yes: function (value) {
+                yes: function () {
                     jQuery.ajax({
                         url: "/smmsmanage/img-list/singeldel",
-                        type: "get",
-                        data: {'v': value},
+                        type: "post",
+                        data: {'delurl': delurl, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                        {#dataType: "json",#}
                         {#success: function (data, status, result){#}
                         success: function (result) {
                             var data = JSON.parse(result);
