@@ -3,6 +3,7 @@ FROM python:3.10
 # Set an environment variable
 ENV APP /app
 #ENV PROJECT_ENV prod
+ENV PORT 8080
 ENV PIP_ROOT_USER_ACTION=ignore
 
 # Create the directory
@@ -24,4 +25,6 @@ EXPOSE 8080
 # Finally, we run uWSGI with the ini file
 USER tomcat
 #CMD ["sleep", "infinity"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["runserver"]
